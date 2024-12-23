@@ -1,0 +1,42 @@
+name: Test Pelican Installation on Linux Distros
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro: [ubuntu:20.04, ubuntu:22.04, debian:10, debian:11, alpine:3.14, alpine:3.15]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker container
+        run: |
+          docker run --name test-container -d -v ${{ github.workspace }}:/workspace -w /workspace ${{ matrix.distro }} tail -f /dev/null
+
+      - name: Install dependencies
+        run: |
+          docker exec test-container /bin/sh -c "
+          if [ -f /etc/debian_version ]; then
+            apt-get update && apt-get install -y curl wget sudo
+          elif [ -f /etc/alpine-release ]; then
+            apk update && apk add curl wget sudo
+          fi
+          "
+
+      - name: Run install script
+        run: |
+          docker exec test-container /bin/sh -c ./get_pelican.sh
+
+      - name: Verify Pelican installation
+        run: |
+          docker exec test-container /bin/sh -c pelican --version
+
+      - name: Clean up
+        run: docker rm -f test-container

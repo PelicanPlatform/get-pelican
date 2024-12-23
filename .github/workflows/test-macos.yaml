@@ -1,0 +1,25 @@
+name: Test Pelican Installation on macOS
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install curl wget
+
+      - name: Run install script
+        run: bash get_pelican.sh
+
+      - name: Verify Pelican installation
+        run: pelican --version
