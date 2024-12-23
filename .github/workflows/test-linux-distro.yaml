@@ -32,7 +32,7 @@ jobs:
 
       - name: Run install script
         run: |
-          docker exec test-container /bin/sh -c $(GITHUB_WORKSPACE)get_pelican.sh
+          docker exec test-container /bin/sh -c ${GITHUB_WORKSPACE}/get_pelican.sh
 
       - name: Verify Pelican installation
         run: |
