@@ -89,6 +89,11 @@ if [ "$os" = "RHEL" ]; then
     arch="aarch64"
   fi
 
+  # change amd64 to x86_64 for RHEL
+  if [ "$arch" = "amd64" ]; then
+    arch="x86_64"
+  fi
+
   yum install -y https://dl.pelicanplatform.org/latest/pelican.${arch}.rpm
 
 elif [ "$os" = "Debian" ]; then
