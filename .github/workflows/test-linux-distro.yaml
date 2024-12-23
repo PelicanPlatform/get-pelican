@@ -30,12 +30,9 @@ jobs:
           fi
           "
 
-      - name: Print container mount point
-        run: docker exec test-container /bin/sh -c "ls -l && pwd"
-
       - name: Run install script
         run: |
-          docker exec test-container /bin/cat /workspace/get_pelican.sh
+          docker exec test-container /bin/sh -c get_pelican.sh
 
       - name: Verify Pelican installation
         run: |
