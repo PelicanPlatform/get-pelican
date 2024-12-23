@@ -1,4 +1,18 @@
 #!/bin/bash
+set -e
+
+#
+# Pelican quick install script
+#
+# View source: https://github.com/PelicanPlatform/get-pelican/blob/main/get_pelican.sh
+# Issues? Create a ticket: https://github.com/PelicanPlatform/get-pelican/issues
+#
+#
+# This script is meant for quick & easy install via:
+#
+#   $ sudo curl -fsSL https://pelicanplatform.org/get-pelican/ | /bin/bash -s -- --no-dry-run
+#
+
 
 # Function to detect OS
 detect_os() {
@@ -15,7 +29,10 @@ detect_os() {
   elif [[ "$OSTYPE" == "darwin"* ]]; then
     echo "MacOS"
   elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
-    echo "Windows"
+    echo "Windows is unsupported at this time"
+    echo "Please open a issue if you would like to see support for Windows"
+    echo "https://github.com/PelicanPlatform/get-pelican/issues"
+    exit 1
   else
     echo "Unsupported OS"
   fi
@@ -25,11 +42,17 @@ detect_os() {
 detect_arch() {
   arch=$(uname -m)
   case "$arch" in
-    x86_64)
+    x86_64 | amd64)
       echo "amd64"
       ;;
-    aarch64)
+    arm64 | aarch64)
       echo "arm64"
+      ;;
+    ppc64le)
+      echo "ppc64le"
+      ;;
+    ppc64el)
+      echo "ppc64el"
       ;;
     *)
       echo "Unsupported architecture"
@@ -51,15 +74,75 @@ if [[ "$os" == "Unsupported OS" || "$arch" == "Unsupported architecture" ]]; the
 fi
 
 # Installation logic (example)
-if [[ "$os" == "RHEL" || "$os" == "Debian" || "$os" == "Alpine" ]]; then
-  echo "Installing Pelican client for $os on $arch..."
-  # Add installation commands here
+if [[ "$os" == "RHEL" ]]; then
+
+  echo "Installing Pelican client for RHEL on $arch..."
+
+  # Check PowerPC architecture
+  if [[ "$arch" == "ppc64el" ]]; then
+    echo "Unsupported architecture (${arch}) for RHEL. Exiting."
+    exit 1
+  fi
+
+  # Change arm64 to aarch64 for RHEL
+  if [[ "$arch" == "arm64" ]]; then
+    arch="aarch64"
+  fi
+
+  sudo yum install -y https://dl.pelicanplatform.org/latest/pelican.${arch}.rpm
+
+elif [[ "$os" == "Debian" ]]; then
+
+  echo "Installing Pelican client for Debian on $arch..."
+
+  # Check PowerPC architecture
+  if [[ "$arch" == "ppc64el" ]]; then
+    echo "Unsupported architecture (${arch}) for Debian. Exiting."
+    exit 1
+  fi
+
+  # Change aarch64 to arm64 for Debian
+  if [[ "$arch" == "aarch64" ]]; then
+    arch="arm64"
+  fi
+
+  wget https://dl.pelicanplatform.org/latest/pelican_${arch}.deb
+  sudo dpkg -i pelican_${arch}.deb
+
+elif [[ "$os" == "Alpine" ]]; then
+  echo "Installing Pelican client for Alpine on $arch..."
+
+  # Check PowerPC architecture
+  if [[ "$arch" == "ppc64el" ]]; then
+    echo "Unsupported architecture (${arch}) for Alpine. Exiting."
+    exit 1
+  fi
+
+  # Change arm64 to aarch64 for RHEL
+  if [[ "$arch" == "arm64" ]]; then
+    arch="aarch64"
+  fi
+
+  wget https://dl.pelicanplatform.org/latest/pelican_${arch}.apk
+  sudo apk add --allow-untrusted pelican_${arch}.apk
+
 elif [[ "$os" == "MacOS" ]]; then
   echo "Installing Pelican client for MacOS on $arch..."
-  # Add installation commands here
-elif [[ "$os" == "Windows" ]]; then
-  echo "Installing Pelican client for Windows on $arch..."
-  # Add installation commands here
+
+  # Verify the arch is arm64 or x86_64
+  if [[ "$arch" != "arm64" && "$arch" != "x86_64" ]]; then
+    echo "Unsupported architecture (${arch}) for MacOS. Exiting."
+    exit 1
+  fi
+
+  curl -LO https://dl.pelicanplatform.org/latest/pelican_Darwin_${arch}.tar.gz
+
+  # The untarred file will include the version number, lets rename it to pelican
+  tar -xvf pelican_Darwin_${arch}.tar.gz --transform 's!^[^/]\+\($\|/\)!pelican\1!'
+
+  sudo mv pelican/pelican /usr/local/bin/pelican
+  rm -rf pelican pelican_Darwin_${arch}.tar.gz
+
 else
   echo "Unsupported OS or architecture. Exiting."
   exit 1
