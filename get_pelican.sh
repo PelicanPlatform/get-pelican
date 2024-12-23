@@ -10,13 +10,13 @@ set -e
 #
 # This script is meant for quick & easy install via:
 #
-#   $ sudo curl -fsSL https://pelicanplatform.org/get-pelican/ | /bin/bash -s -- --no-dry-run
+#   $ sudo curl -fsSL https://pelicanplatform.org/get-pelican/ | /bin/sh -s -- --no-dry-run
 #
 
 
 # Function to detect OS
 detect_os() {
-  if [[ "$(uname -o)" == "Linux" || "$(uname -o)" == "GNU/Linux" ]]; then
+  if [ "$(uname -o)" = "Linux" ] || [ "$(uname -o)" = "GNU/Linux" ]; then
     if [ -f /etc/redhat-release ]; then
       echo "RHEL"
     elif [ -f /etc/debian_version ]; then
@@ -26,11 +26,11 @@ detect_os() {
     else
       echo "Unsupported OS"
     fi
-  elif [[ "$(uname -o)" == "Darwin" ]]; then
+  elif [ "$(uname -o)" = "Darwin" ]; then
     echo "MacOS"
-  elif [[ "$(uname -o)" == "Cygwin" || "$(uname -o)" == "Msys" || "$(uname -o)" == "Windows" ]]; then
+  elif [ "$(uname -o)" = "Cygwin" ] || [ "$(uname -o)" = "Msys" ] || [ "$(uname -o)" = "Windows" ]; then
     echo "Windows is unsupported at this time"
-    echo "Please open a issue if you would like to see support for Windows"
+    echo "Please open an issue if you would like to see support for Windows"
     echo "https://github.com/PelicanPlatform/get-pelican/issues"
     exit 1
   else
@@ -68,74 +68,74 @@ echo "Detected OS: $os"
 echo "Detected Architecture: $arch"
 
 # Check compatibility and install Pelican client
-if [[ "$os" == "Unsupported OS" || "$arch" == "Unsupported architecture" ]]; then
+if [ "$os" = "Unsupported OS" ] || [ "$arch" = "Unsupported architecture" ]; then
   echo "Incompatible OS or architecture. Exiting."
   exit 1
 fi
 
 # Installation logic (example)
-if [[ "$os" == "RHEL" ]]; then
+if [ "$os" = "RHEL" ]; then
 
   echo "Installing Pelican client for RHEL on $arch..."
 
   # Check PowerPC architecture
-  if [[ "$arch" == "ppc64el" ]]; then
+  if [ "$arch" = "ppc64el" ]; then
     echo "Unsupported architecture (${arch}) for RHEL. Exiting."
     exit 1
   fi
 
   # Change arm64 to aarch64 for RHEL
-  if [[ "$arch" == "arm64" ]]; then
+  if [ "$arch" = "arm64" ]; then
     arch="aarch64"
   fi
 
-  sudo yum install -y https://dl.pelicanplatform.org/latest/pelican.${arch}.rpm
+  yum install -y https://dl.pelicanplatform.org/latest/pelican.${arch}.rpm
 
-elif [[ "$os" == "Debian" ]]; then
+elif [ "$os" = "Debian" ]; then
 
   echo "Installing Pelican client for Debian on $arch..."
 
   # Check PowerPC architecture
-  if [[ "$arch" == "ppc64el" ]]; then
+  if [ "$arch" = "ppc64el" ]; then
     echo "Unsupported architecture (${arch}) for Debian. Exiting."
     exit 1
   fi
 
   # Change aarch64 to arm64 for Debian
-  if [[ "$arch" == "aarch64" ]]; then
+  if [ "$arch" = "aarch64" ]; then
     arch="arm64"
   fi
 
   wget https://dl.pelicanplatform.org/latest/pelican_${arch}.deb
-  sudo dpkg -i pelican_${arch}.deb
+  dpkg -i pelican_${arch}.deb
 
-elif [[ "$os" == "Alpine" ]]; then
+elif [ "$os" = "Alpine" ]; then
   echo "Installing Pelican client for Alpine on $arch..."
 
   # Check PowerPC architecture
-  if [[ "$arch" == "ppc64el" ]]; then
+  if [ "$arch" = "ppc64el" ]; then
     echo "Unsupported architecture (${arch}) for Alpine. Exiting."
     exit 1
   fi
 
   # Change arm64 to aarch64 for RHEL
-  if [[ "$arch" == "arm64" ]]; then
+  if [ "$arch" = "arm64" ]; then
     arch="aarch64"
   fi
 
   # Change amd64 to x86_64 for Alpine
-  if [[ "$arch" == "amd64" ]]; then
+  if [ "$arch" = "amd64" ]; then
     arch="x86_64"
   fi
 
   wget https://dl.pelicanplatform.org/latest/pelican_${arch}.apk
-  sudo apk add --allow-untrusted pelican_${arch}.apk
+  apk add --allow-untrusted pelican_${arch}.apk
 
-elif [[ "$os" == "MacOS" ]]; then
+elif [ "$os" = "MacOS" ]; then
   echo "Installing Pelican client for MacOS on $arch..."
 
   # Verify the arch is arm64 or x86_64
-  if [[ "$arch" != "arm64" && "$arch" != "x86_64" ]]; then
+  if [ "$arch" != "arm64" ] && [ "$arch" != "x86_64" ]; then
     echo "Unsupported architecture (${arch}) for MacOS. Exiting."
     exit 1
   fi
@@ -146,7 +146,7 @@ elif [[ "$os" == "MacOS" ]]; then
   mkdir pelican
   tar -xvf pelican_Darwin_${arch}.tar.gz -C pelican --strip-components=1
 
-  sudo mv pelican/pelican /usr/local/bin/pelican
+  mv pelican/pelican /usr/local/bin/pelican
   rm -rf pelican pelican_Darwin_${arch}.tar.gz
 
 else
