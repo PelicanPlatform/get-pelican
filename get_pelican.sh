@@ -123,6 +123,11 @@ elif [[ "$os" == "Alpine" ]]; then
     arch="aarch64"
   fi
 
+  # Change amd64 to x86_64 for Alpine
+  if [[ "$arch" == "amd64" ]]; then
+    arch="x86_64"
+  fi
+
   wget https://dl.pelicanplatform.org/latest/pelican_${arch}.apk
   sudo apk add --allow-untrusted pelican_${arch}.apk
 
