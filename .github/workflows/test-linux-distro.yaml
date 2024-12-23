@@ -25,7 +25,7 @@ jobs:
 
       - name: Print Containers Files
         run: |
-          docker exec test-container ls -la
+          docker exec test-container /bin/sh ls -la
 
       - name: Install dependencies
         run: |
