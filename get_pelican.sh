@@ -138,7 +138,8 @@ elif [[ "$os" == "MacOS" ]]; then
   curl -LO https://dl.pelicanplatform.org/latest/pelican_Darwin_${arch}.tar.gz
 
   # The untarred file will include the version number, lets rename it to pelican
-  tar -xvf pelican_Darwin_${arch}.tar.gz --transform 's!^[^/]\+\($\|/\)!pelican\1!'
+  mkdir pelican
+  tar -xvf pelican_Darwin_${arch}.tar.gz -C pelican --strip-components=1
 
   sudo mv pelican/pelican /usr/local/bin/pelican
   rm -rf pelican pelican_Darwin_${arch}.tar.gz
