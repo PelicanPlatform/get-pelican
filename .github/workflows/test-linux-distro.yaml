@@ -18,7 +18,14 @@ jobs:
 
       - name: Set up Docker container
         run: |
+          ls -la
+          pwd
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           docker run --name test-container -d -v ${GITHUB_WORKSPACE}:/workspace -w /workspace ${{ matrix.distro }} tail -f /dev/null
+
+      - name: Print Containers Files
+        run: |
+          docker exec test-container ls -la
 
       - name: Install dependencies
         run: |
