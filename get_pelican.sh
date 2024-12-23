@@ -15,26 +15,28 @@ set -e
 
 
 # Function to detect OS
-if [[ "$(uname -o)" == "Linux" || "$(uname -o)" == "GNU/Linux" ]]; then
-  if [ -f /etc/redhat-release ]; then
-    echo "RHEL"
-  elif [ -f /etc/debian_version ]; then
-    echo "Debian"
-  elif [ -f /etc/alpine-release ]; then
-    echo "Alpine"
+detect_os() {
+  if [[ "$(uname -o)" == "Linux" || "$(uname -o)" == "GNU/Linux" ]]; then
+    if [ -f /etc/redhat-release ]; then
+      echo "RHEL"
+    elif [ -f /etc/debian_version ]; then
+      echo "Debian"
+    elif [ -f /etc/alpine-release ]; then
+      echo "Alpine"
+    else
+      echo "Unsupported OS"
+    fi
+  elif [[ "$(uname -o)" == "Darwin" ]]; then
+    echo "MacOS"
+  elif [[ "$(uname -o)" == "Cygwin" || "$(uname -o)" == "Msys" || "$(uname -o)" == "Windows" ]]; then
+    echo "Windows is unsupported at this time"
+    echo "Please open a issue if you would like to see support for Windows"
+    echo "https://github.com/PelicanPlatform/get-pelican/issues"
+    exit 1
   else
     echo "Unsupported OS"
   fi
-elif [[ "$(uname -o)" == "Darwin" ]]; then
-  echo "MacOS"
-elif [[ "$(uname -o)" == "Cygwin" || "$(uname -o)" == "Msys" || "$(uname -o)" == "Windows" ]]; then
-  echo "Windows is unsupported at this time"
-  echo "Please open a issue if you would like to see support for Windows"
-  echo "https://github.com/PelicanPlatform/get-pelican/issues"
-  exit 1
-else
-  echo "Unsupported OS"
-fi
+}
 
 # Function to detect architecture
 detect_arch() {
