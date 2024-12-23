@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: ["ubuntu:latest", "debian:latest", "alpine:latest"]
+        distro: ["ubuntu:latest", "debian:latest", "alpine:latest", "quay.io/centos/centos:stream9"]
 
     steps:
       - name: Checkout repository
