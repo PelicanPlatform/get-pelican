@@ -18,14 +18,7 @@ jobs:
 
       - name: Set up Docker container
         run: |
-          ls -la
-          pwd
-          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           docker run --name test-container -d -v ${GITHUB_WORKSPACE}:/workspace -w /workspace ${{ matrix.distro }} tail -f /dev/null
-
-      - name: Print Containers Files
-        run: |
-          docker exec test-container /bin/sh ls -la
 
       - name: Install dependencies
         run: |
@@ -39,11 +32,11 @@ jobs:
 
       - name: Run install script
         run: |
-          docker exec test-container /bin/sh -c get_pelican.sh
+          docker exec test-container /bin/sh -c $(GITHUB_WORKSPACE)get_pelican.sh
 
       - name: Verify Pelican installation
         run: |
-          docker exec test-container /bin/sh -c pelican --version
+          docker exec test-container pelican --version
 
       - name: Clean up
         run: docker rm -f test-container
