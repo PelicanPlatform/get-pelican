@@ -19,7 +19,7 @@ jobs:
           brew install curl wget
 
       - name: Run install script
-        run: sh get_pelican.sh
+        run: curl -fsSL https://pelicanplatform.org/get-pelican/ | /bin/sh -s
 
       - name: Verify Pelican installation
         run: pelican --version
