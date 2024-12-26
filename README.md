@@ -6,8 +6,8 @@
 ##### Tested Operating Systems
 
 - Macos
-- Centos Stream 8,9
-- Ubuntu 22,24,latest
+- Centos Stream 9,10
+- Ubuntu 22(jammy),latest,rolling,devel
 - Debian 11,12,latest
 - Alpine Latest edge,latest,3.21,3.20
 
