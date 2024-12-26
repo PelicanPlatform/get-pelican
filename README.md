@@ -7,7 +7,7 @@
 
 - Macos
 - Centos Stream 8,9
-- Ubuntu 20,22,24,latest
+- Ubuntu 22,24,latest
 - Debian 11,12,latest
 - Alpine Latest edge,latest,3.21,3.20
 

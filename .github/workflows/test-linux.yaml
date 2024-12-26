@@ -11,7 +11,6 @@ jobs:
     strategy:
       matrix:
         distro:
-          - "ubuntu:20"
           - "ubuntu:22"
           - "ubuntu:24"
           - "ubuntu:latest"
