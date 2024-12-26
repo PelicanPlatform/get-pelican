@@ -1,4 +1,4 @@
-name: Test Pelican Installation on Linux Distros
+name: Test Pelican Installation on Linux Distros via Curl
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Test Pelican Installation on macOS
+name: Test Pelican Installation on macOS via Curl
 
 on:
   push:
