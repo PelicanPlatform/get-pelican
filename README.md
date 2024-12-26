@@ -1,3 +1,15 @@
+```shell
+# Install Pelican
+sudo sh -c "curl -fsSL https://pelicanplatform.org/get-pelican/ | /bin/sh -s"
+
+# Take it for a spin
+pelican --version
+```
+
+# Get Pelican
+
+Installs a version of the Pelican Binary, taking a look at the running host to guess the OS and architecture automatically.
+
 [![Test Pelican Installation on macOS](https://github.com/PelicanPlatform/get-pelican/actions/workflows/test-macos.yaml/badge.svg)](https://github.com/PelicanPlatform/get-pelican/actions/workflows/test-macos.yaml)
 [![Test Pelican Installation on Linux Distros](https://github.com/PelicanPlatform/get-pelican/actions/workflows/test-linux.yaml/badge.svg)](https://github.com/PelicanPlatform/get-pelican/actions/workflows/test-linux.yaml)
 [![Test Pelican Installation on macOS via Curl](https://github.com/PelicanPlatform/get-pelican/actions/workflows/test-macos-via-curl.yaml/badge.svg)](https://github.com/PelicanPlatform/get-pelican/actions/workflows/test-macos-via-curl.yaml)
@@ -10,8 +22,3 @@
 - Ubuntu 22(jammy),latest,rolling,devel
 - Debian 11,12,latest
 - Alpine Latest edge,latest,3.21,3.20
-
-
-# Get Pelican 
-
-Installs a version of the Pelican Binary, taking a look at the running host to guess the OS and aarch automatically. 
