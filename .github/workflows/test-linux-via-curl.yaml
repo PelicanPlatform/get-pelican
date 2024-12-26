@@ -32,7 +32,7 @@ jobs:
 
       - name: Run install script
         run: |
-          docker exec test-container curl -fsSL https://pelicanplatform.org/get-pelican/ | /bin/sh -s
+          docker exec test-container sudo curl -fsSL https://pelicanplatform.org/get-pelican/ | /bin/sh -s
 
       - name: Verify Pelican installation
         run: |
