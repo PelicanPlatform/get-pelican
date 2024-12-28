@@ -29,9 +29,9 @@ detect_os() {
   elif [ "$(uname -o)" = "Darwin" ]; then
     echo "MacOS"
   elif [ "$(uname -o)" = "Cygwin" ] || [ "$(uname -o)" = "Msys" ] || [ "$(uname -o)" = "Windows" ]; then
-    echo "Windows is unsupported at this time"
-    echo "Please open an issue if you would like to see support for Windows"
-    echo "https://github.com/PelicanPlatform/get-pelican/issues"
+    echo >&2 "Windows is unsupported at this time"
+    echo >&2 "Please open an issue if you would like to see support for Windows"
+    echo >&2 "https://github.com/PelicanPlatform/get-pelican/issues"
     exit 1
   else
     echo "Unsupported OS"
@@ -60,7 +60,7 @@ detect_arch() {
   esac
 }
 
-# Dry run
+
 os=$(detect_os)
 arch=$(detect_arch)
 
