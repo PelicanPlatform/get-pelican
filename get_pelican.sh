@@ -116,13 +116,13 @@ elif [ "$os" = "Alpine" ]; then
   apk add --allow-untrusted pelican_${arch}.apk
 
 elif [ "$os" = "MacOS" ]; then
-  echo "Installing Pelican client for MacOS on $arch..."
-
   # Verify the arch is arm64 or x86_64
   if [ "$arch" != "arm64" ] && [ "$arch" != "x86_64" ]; then
     echo "Unsupported architecture (${arch}) for MacOS. Exiting."
     exit 1
   fi
+
+  echo "Installing Pelican client for MacOS on $arch..."
 
   curl -LO https://dl.pelicanplatform.org/latest/pelican_Darwin_${arch}.tar.gz
 
