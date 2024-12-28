@@ -10,7 +10,7 @@ set -e
 #
 # This script is meant for quick & easy install via:
 #
-#   $ curl -fsSL https://pelicanplatform.org/get-pelican/ | sudo /bin/sh -s -- --no-dry-run
+#   $ curl -fsSL https://pelicanplatform.org/get-pelican/ | sudo /bin/sh -s
 #
 
 
