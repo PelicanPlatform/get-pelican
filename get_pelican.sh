@@ -51,9 +51,6 @@ detect_arch() {
     ppc64le)
       echo "ppc64le"
       ;;
-    ppc64el)
-      echo "ppc64el"
-      ;;
     *)
       echo "Unsupported architecture"
       ;;
@@ -78,12 +75,6 @@ if [ "$os" = "RHEL" ]; then
 
   echo "Installing Pelican client for RHEL on $arch..."
 
-  # Check PowerPC architecture
-  if [ "$arch" = "ppc64el" ]; then
-    echo "Unsupported architecture (${arch}) for RHEL. Exiting."
-    exit 1
-  fi
-
   # Change arm64 to aarch64 for RHEL
   if [ "$arch" = "arm64" ]; then
     arch="aarch64"
@@ -100,12 +91,6 @@ elif [ "$os" = "Debian" ]; then
 
   echo "Installing Pelican client for Debian on $arch..."
 
-  # Check PowerPC architecture
-  if [ "$arch" = "ppc64el" ]; then
-    echo "Unsupported architecture (${arch}) for Debian. Exiting."
-    exit 1
-  fi
-
   # Change aarch64 to arm64 for Debian
   if [ "$arch" = "aarch64" ]; then
     arch="arm64"
@@ -116,12 +101,6 @@ elif [ "$os" = "Debian" ]; then
 
 elif [ "$os" = "Alpine" ]; then
   echo "Installing Pelican client for Alpine on $arch..."
-
-  # Check PowerPC architecture
-  if [ "$arch" = "ppc64el" ]; then
-    echo "Unsupported architecture (${arch}) for Alpine. Exiting."
-    exit 1
-  fi
 
   # Change arm64 to aarch64 for RHEL
   if [ "$arch" = "arm64" ]; then
