@@ -70,6 +70,15 @@ if [ "$os" = "Unsupported OS" ] || [ "$arch" = "Unsupported architecture" ]; the
   exit 1
 fi
 
+workdir=$(mktemp -d)
+if [ $? != 0 ]; then
+  echo "Unable to create temporary directory; exiting."
+  exit 1
+fi
+trap "rm -rf \"${workdir:?}\"" EXIT
+olddir=$PWD
+cd "$workdir"
+
 # Installation logic (example)
 if [ "$os" = "RHEL" ]; then
 
@@ -127,11 +136,9 @@ elif [ "$os" = "MacOS" ]; then
   curl -LO https://dl.pelicanplatform.org/latest/pelican_Darwin_${arch}.tar.gz
 
   # The untarred file will include the version number, lets rename it to pelican
-  mkdir pelican
-  tar -xvf pelican_Darwin_${arch}.tar.gz -C pelican --strip-components=1
+  tar -xvf pelican_Darwin_${arch}.tar.gz --strip-components=1
 
-  mv pelican/pelican /usr/local/bin/pelican
-  rm -rf pelican pelican_Darwin_${arch}.tar.gz
+  mv pelican /usr/local/bin/pelican
 
 else
   echo "Unsupported OS or architecture. Exiting."
