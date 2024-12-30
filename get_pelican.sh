@@ -29,9 +29,9 @@ detect_os() {
   elif [ "$(uname -o)" = "Darwin" ]; then
     echo "MacOS"
   elif [ "$(uname -o)" = "Cygwin" ] || [ "$(uname -o)" = "Msys" ] || [ "$(uname -o)" = "Windows" ]; then
-    echo "Windows is unsupported at this time"
-    echo "Please open an issue if you would like to see support for Windows"
-    echo "https://github.com/PelicanPlatform/get-pelican/issues"
+    echo >&2 "Windows is unsupported at this time"
+    echo >&2 "Please open an issue if you would like to see support for Windows"
+    echo >&2 "https://github.com/PelicanPlatform/get-pelican/issues"
     exit 1
   else
     echo "Unsupported OS"
@@ -60,7 +60,7 @@ detect_arch() {
   esac
 }
 
-# Dry run
+
 os=$(detect_os)
 arch=$(detect_arch)
 
@@ -72,6 +72,15 @@ if [ "$os" = "Unsupported OS" ] || [ "$arch" = "Unsupported architecture" ]; the
   echo "Incompatible OS or architecture. Exiting."
   exit 1
 fi
+
+workdir=$(mktemp -d)
+if [ $? != 0 ]; then
+  echo "Unable to create temporary directory; exiting."
+  exit 1
+fi
+trap "rm -rf \"${workdir:?}\"" EXIT
+olddir=$PWD
+cd "$workdir"
 
 # Installation logic (example)
 if [ "$os" = "RHEL" ]; then
@@ -99,12 +108,6 @@ if [ "$os" = "RHEL" ]; then
 elif [ "$os" = "Debian" ]; then
 
   echo "Installing Pelican client for Debian on $arch..."
-
-  # Check PowerPC architecture
-  if [ "$arch" = "ppc64el" ]; then
-    echo "Unsupported architecture (${arch}) for Debian. Exiting."
-    exit 1
-  fi
 
   # Change aarch64 to arm64 for Debian
   if [ "$arch" = "aarch64" ]; then
@@ -137,22 +140,20 @@ elif [ "$os" = "Alpine" ]; then
   apk add --allow-untrusted pelican_${arch}.apk
 
 elif [ "$os" = "MacOS" ]; then
-  echo "Installing Pelican client for MacOS on $arch..."
-
   # Verify the arch is arm64 or x86_64
   if [ "$arch" != "arm64" ] && [ "$arch" != "x86_64" ]; then
     echo "Unsupported architecture (${arch}) for MacOS. Exiting."
     exit 1
   fi
 
+  echo "Installing Pelican client for MacOS on $arch..."
+
   curl -LO https://dl.pelicanplatform.org/latest/pelican_Darwin_${arch}.tar.gz
 
   # The untarred file will include the version number, lets rename it to pelican
-  mkdir pelican
-  tar -xvf pelican_Darwin_${arch}.tar.gz -C pelican --strip-components=1
+  tar -xvf pelican_Darwin_${arch}.tar.gz --strip-components=1
 
-  mv pelican/pelican /usr/local/bin/pelican
-  rm -rf pelican pelican_Darwin_${arch}.tar.gz
+  mv pelican /usr/local/bin/pelican
 
 else
   echo "Unsupported OS or architecture. Exiting."
