@@ -22,3 +22,4 @@ Installs a version of the Pelican Binary, taking a look at the running host to g
 - Ubuntu 22(jammy),latest,rolling,devel
 - Debian 11,12,latest
 - Alpine Latest edge,latest,3.21,3.20
+
